@@ -7,17 +7,8 @@ const FILES_TO_UPDATE = ['package.json', 'README.md', 'bun.lock'];
 (async () => {
     intro('Setup');
 
-    const packageName = await text({
-        message: 'What is the name of your package?',
-    });
-
-    if (isCancel(packageName)) {
-        cancel('Operation cancelled.');
-        process.exit(1);
-    }
-
     const packageDescription = await text({
-        message: 'Provide a short description of your package:',
+        message: 'Provide a short description of the package:',
     });
 
     if (isCancel(packageDescription)) {
@@ -27,17 +18,23 @@ const FILES_TO_UPDATE = ['package.json', 'README.md', 'bun.lock'];
 
     const githubUrl = await $`git remote get-url origin`.quiet().text('utf-8');
 
+    const parts = githubUrl.trim().split('/');
+    const owner = parts[parts.length - 2].trim();
+    const repoName = parts[parts.length - 1].replace('.git', '').trim();
+
     for (const filePath of FILES_TO_UPDATE)
         try {
             let content = await readFile(filePath.trim(), 'utf-8');
 
             content = content
-                .replaceAll('{{package.name}}', packageName.trim())
+                .replaceAll('{{package.name}}', `@${owner}/${repoName}`)
                 .replaceAll(
                     '{{package.description}}',
                     packageDescription.trim(),
                 )
-                .replaceAll('{{github.url}}', githubUrl.trim());
+                .replaceAll('{{github.url}}', githubUrl.trim())
+                .replaceAll('{{github.owner}}', owner)
+                .replaceAll('{{github.repo}}', repoName);
 
             await writeFile(filePath.trim(), content, 'utf-8');
         } catch {}
