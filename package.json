@@ -1,6 +1,6 @@
 {
     "name": "{{package.name}}",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "devDependencies": {
         "@biomejs/biome": "2.2.6",
         "@clack/prompts": "^0.11.0",
