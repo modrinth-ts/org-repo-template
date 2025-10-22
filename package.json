@@ -23,7 +23,7 @@
         "ci": "biome ci",
         "build": "tsc",
         "dev": "tsc --watch",
-        "setup": "bun run ./scripts/setup.ts && bun i --force && bunx simple-git-hooks && bun run biome",
+        "setup": "bun run ./scripts/setup.ts && bun i --force && bunx simple-git-hooks && bun run biome && git add . && git commit -m 'chore: project setup'",
         "tags": "git push origin --tags && git push",
         "patch": "bun pm version patch && bun run tags",
         "minor": "bun pm version minor && bun run tags",
